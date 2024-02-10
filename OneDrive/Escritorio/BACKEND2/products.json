@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "mueble de cocina",
+    "description": "descripcion",
+    "price": 5000,
+    "img": "imagen1.jpg",
+    "code": "001",
+    "stock": 500
+  },
+  {
+    "id": 2,
+    "title": "mueble de baño",
+    "description": "descripcion",
+    "price": 3000,
+    "img": "imagen2.jpg",
+    "code": "002",
+    "stock": 35
+  },
+  {
+    "id": 3,
+    "title": "mueble de dormitorio",
+    "description": "descripcion del mueble de dormitorio",
+    "price": 4500,
+    "img": "imagen3.jpg",
+    "code": "003",
+    "stock": 55
+  }
+]

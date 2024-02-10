@@ -1,0 +1,18 @@
+{
+    "dependencies": {
+      "nodemon": "^3.0.3",
+      "package": "^1.0.1"
+    },
+    "name": "productmanager",
+    "type": "module",
+    "version": "1.0.0",
+    "description": "entrega 2",
+    "main": "ProductManager.js",
+    "devDependencies": {},
+    "scripts": {
+      "start": "node ProductManager.js",
+      "test": "nodemon ProductManager.js"
+    },
+    "author": "Antonella Pace",
+    "license": "ISC"
+  }
