@@ -25,5 +25,14 @@
     "img": "imagen3.jpg",
     "code": "003",
     "stock": 55
+  },
+  {
+    "id": 4,
+    "title": "mueble de comedor",
+    "description": "descripcion del mueble de comedor",
+    "price": 7000,
+    "img": "imagen4.jpg",
+    "code": "004",
+    "stock": 15
   }
 ]
