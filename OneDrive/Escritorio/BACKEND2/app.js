@@ -39,7 +39,6 @@ app.get('/products/:pid', async (req, res) => {
     }
 });
 
-//Iniciar server
 app.listen(PORT, () => {
     console.log(`servidor funcionando en puerto ${PORT}.`);
 });
