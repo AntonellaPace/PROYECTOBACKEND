@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 
 export default class ProductManager {
-    constructor() {
+    constructor() { 
       this.products = [];
       this.id = 1;
       this.path = "./products.json";
@@ -82,7 +82,6 @@ export default class ProductManager {
         }  
     };
 
-// Elimina un producto por su ID
     deleteId = async (id) => {
         try {
             let found = false;
