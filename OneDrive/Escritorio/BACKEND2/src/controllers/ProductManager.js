@@ -4,7 +4,7 @@ export default class ProductManager {
     constructor() {
         this.products = [];
         this.id = 1;
-        this.path = "../data/products.json";
+        this.path = "./src/data/products.json";
     }
 
     addProduct = async (title, description, price, img, code, stock) => {
@@ -31,12 +31,12 @@ export default class ProductManager {
         };
         this.products.push(newProduct);
         this.id++;
-        console.log(" El producto se agrego correctamente:", newProduct);
+        console.log(`El producto ${newProduct} se agrego correctamente`);
 
         try {
             await fs.writeFile(this.path, JSON.stringify(this.products, null, 2));
         } catch (error) {
-            console.error("No se pudo guardar el producto:", error);
+            console.error("No se pudo guardar el producto");
             throw error;
         }
     };
@@ -70,7 +70,6 @@ export default class ProductManager {
             const products = await this.getProducts();
             const productIndex = products.findIndex(product => product.id === productId);
             if (productIndex === -1) {
-                console.log(' No se encontró ningún producto con ese ID');
                 return;
             }
             products[productIndex] = { ...products[productIndex], ...updatedFields };

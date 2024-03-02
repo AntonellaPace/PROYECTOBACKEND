@@ -2,7 +2,7 @@ import { promises as fs, readFile } from 'fs';
 
 export default class CartManager {
     constructor() {
-        this.cart = '../data/carrito.json';
+        this.cart = './src/data/carrito.json';
         this.countId = 0;
     }
 

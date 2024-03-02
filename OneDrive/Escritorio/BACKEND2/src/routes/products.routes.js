@@ -1,9 +1,6 @@
-import express from 'express';
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
 import ProductManager from '../controllers/ProductManager.js'
-
-router.use(express.json());
-router.use(express.urlencoded({ extended:true }));
 
 const pm = new ProductManager("../data/products.json");
 

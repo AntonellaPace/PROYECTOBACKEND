@@ -1,0 +1,15 @@
+<body>
+    <h1>Listado de Productos en Tiempo Real</h1>
+    <ul id="productList">
+        {{#each products}}
+            <li>{{this.title}}</li>
+            <li>{{this.description}}</li>
+            <li>{{this.price}}</li>
+            <li>{{this.stock}}</li>
+            <button class="removeBtn" data-id="{{this.id}}">Quitar</button>
+            <button class="addBtn" data-id="{{this.id}}">Agregar</button>
+        {{/each}}
+    </ul>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
+    <script src="../public/js/main.js"></script>
+</body>
