@@ -1,53 +1,135 @@
-import { promises as fs, readFile } from 'fs';
+import CartModel from "../models/cart.model.js";
 
-export default class CartManager {
-    constructor() {
-        this.cart = './src/data/carrito.json';
-        this.countId = 0;
-    }
+class CartManager {
 
-    async saveCart(cart) {
-        await fs.writeFile(this.cart, JSON.stringify(cart, null, 2));
-    };
-
-    async readCart() {
+    async createCart() {
         try {
-            const cart = await fs.readFile(this.cart, 'utf-8');
-            return JSON.parse(cart);
+            const newCart = new CartModel({ products: [] });
+            await newCart.save();
+            return newCart;
         } catch (error) {
-            if (error.code === 'ENOENT') {
-                await this.saveCart([]);
-                return [];
-            } else {
-                throw error;
-            }
+            console.log("error al crear el carrito", error)
+            throw error;
         }
-    };
-
-    async addCart(product, quantity = 1,) {
-        let cart = await this.readCart();
-        const prodIndex = cart.findIndex(item => item.product.id === product.id);
-        if (prodIndex !== -1) {
-            cart[prodIndex].quantity += quantity;
-        } else {
-            const newCartItem = {
-                id: ++this.countId,
-                product,
-                quantity
-            };
-            cart.push(newCartItem);
-        }
-        await this.saveCart(cart);
-        return cart;
-    };
+    }
 
     async getCartById(cid) {
         try {
-            const cartList = await this.readCart();
-            return cartList.find(cart => cart.id === cid);
+            const cartList = await CartModel.findById(cid)
+            if (!cartList) {
+                throw new Error(`no existe un carrito con el id: ${cid}`)
+            }
+            return cartList;
         } catch (error) {
-            throw new Error('Error al obtener el carrito por su ID: ' + error.message);
+            throw new Error(`Error al obtener el carrito con el id: ${cid}` + error.message);
         }
     };
 
+    async addCart(cid, productId, quantity = 1) {
+        try {
+            const cart = await this.getCartById(cid);
+            const existeProduct = cart.products.find(item => item.product.toString() === productId);
+            if (existeProduct) {
+                existeProduct.quantity += quantity;
+            } else {
+                cart.products.push({ product: productId, quantity });
+            }
+            cart.markModified("products");
+            await cart.save();
+            return cart;
+        } catch (error) {
+            console.error("error al agregar el producto", error);
+            throw error;
+        }
+    };
+
+    async removeProductFromCart(cid, productId) {
+        try {
+            const cart = await CartModel.findById(cid);
+
+            if (!cart) {
+                throw new Error('Carrito no encontrado');
+            }
+
+            cart.products = cart.products.filter(item => item.product._id.toString() !== productId);
+
+            await cart.save();
+
+            return cart;
+        } catch (error) {
+            console.error('Error al eliminar el producto del carrito ', error);
+            throw error;
+        }
+    };
+
+    async updateCart (cid, updatedProducts) {
+        try {
+            const cart = await CartModel.findById(cid);
+
+            if (!cart) {
+                throw new Error('Carrito no encontrado');
+            }
+
+            cart.products = updatedProducts;
+
+            cart.markModified('products');
+
+            await cart.save();
+
+            return cart;
+        } catch (error) {
+            console.error('Error al actualizar el carrito en el gestor', error);
+            throw error;
+        }
+    };
+
+    async updateProductQantity (cartId, productId, newQuantity) {
+        try {
+            const cart = await CartModel.findById(cartId);
+
+            if (!cart) {
+                throw new Error('Carrito no encontrado');
+            }
+
+            const productIndex = cart.products.findIndex(item => item.product._id.toString() !== productId);
+
+            if (productIndex !== -1) {
+                cart.products[productIndex].quantity = newQuantity;
+
+                cart.markModified('products');
+
+                await cart.save();
+                return cart;
+            } else {
+                throw new Error('Producto no encontrado en el carrito');
+            }
+        } catch (error) {
+            console.error('Error al actualizar la cantidad del producto en el carrito', error);
+            throw error;
+        }
+    };
+
+    async emptyCart (cartId) {
+        try {
+            const cart = await CartModel.findByIdAndUpdate(
+                cartId,
+                { products: [] },
+                { new: true }
+            );
+
+            if (!cart) {
+                throw new Error('Carrito no encontrado');
+            }
+
+            return cart;
+        } catch (error) {
+            console.error('Error al vaciar el carrito en el cartmanager', error);
+            throw error;
+        }
+    }
+
+
 };
+
+
+export default CartManager;

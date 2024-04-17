@@ -1,12 +1,12 @@
 <body>
     <div>
-        <h1>Listado de Productos</h1>
+        <h1>Listado de Productos: </h1>
         {{#each products }}
         <ul>
             <li>{{this.title}}</li>
             <li>{{this.description}}</li>
-            <li>{{this.price}}</li>
-            <li>{{this.stock}}</li>
+            <li>Precio: ${{this.price}}</li>
+            <li>Stock: {{this.stock}}</li>
         </ul>
         {{/each}}
     </div>
