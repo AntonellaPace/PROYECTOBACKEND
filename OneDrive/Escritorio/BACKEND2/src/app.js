@@ -12,11 +12,15 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import sessionsRouter from "./routes/sessions.router.js";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
+
 
 const app = express();
 const PORT = 8080;
 const server = http.createServer(app);
 const io = new Server(server);
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +31,7 @@ app.engine("handlebars", exphbs.engine({
         allowProtoPropertiesByDefault: true
     }
 }));
+
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
 
@@ -40,9 +45,14 @@ app.use(session({
     resave:true,
     saveUninitialized: true,
     store: MongoStore.create({
-        mongoUrl:"mongodb+srv://antopaceescoto:coderhouse@cluster0.r4w1gui.mongodb.net/backendpace?retryWrites=true&w=majority&appName=Cluster0", ttl: 100
+        mongoUrl:"mongodb+srv://antopaceescoto:coderhouse@cluster0.r4w1gui.mongodb.net/backendpace?retryWrites=true&w=majority&appName=Cluster0", ttl: 10
     })
 }));
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use('/', viewsRouter);
 app.use('/products', productsRouter);

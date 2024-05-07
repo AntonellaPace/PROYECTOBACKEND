@@ -90,9 +90,9 @@ router.put('/:cid/product/:pid', async (req, res) => {
     try {
         const cartId = req.params.cid;
         const productId = req.params.pid;
-        const newQuantity = req.body.quantity;
+        const updatedQuantity = req.body.quantity;
 
-        const updatedCart = await cm.updateProductQantity(cartId, productId, newQuantity);
+        const updatedCart = await cm.updateProductQuantity(cartId, productId, updatedQuantity);
 
         res.json({
             status: 'success',

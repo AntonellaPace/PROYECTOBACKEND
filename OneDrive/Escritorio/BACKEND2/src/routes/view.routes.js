@@ -40,7 +40,7 @@ router.get("/products", async (req, res) => {
          limit: parseInt(limit)
       });
 
-      const newArray = products.docs.map(product => {
+      const newArray = products.map(product => {
          const { _id, ...rest } = product.toObject();
          return rest;
       });

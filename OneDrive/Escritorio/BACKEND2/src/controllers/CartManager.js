@@ -62,7 +62,7 @@ class CartManager {
         }
     };
 
-    async updateCart (cid, updatedProducts) {
+    async updateCart(cid, updatedProducts) {
         try {
             const cart = await CartModel.findById(cid);
 
@@ -83,33 +83,63 @@ class CartManager {
         }
     };
 
-    async updateProductQantity (cartId, productId, newQuantity) {
+    /* async updateProductQantity (cartId, productId, newQuantity) {
+         try {
+             const cart = await CartModel.findById(cartId);
+ 
+             if (!cart) {
+                 throw new Error('Carrito no encontrado');
+             }
+ 
+             const productIndex = cart.products.findIndex(item => item._id.toString() !== productId);
+ 
+             if (productIndex !== -1) {
+                 cart.products[productIndex].quantity = newQuantity;
+ 
+                 cart.markModified('products');
+ 
+                 await cart.save();
+                 return cart;
+             } else {
+                 throw new Error('Producto no encontrado en el carrito');
+             }
+         } catch (error) {
+             console.error('Error al actualizar la cantidad del producto en el carrito', error);
+             throw error;
+         }
+     };*/
+
+
+    async updateProductQuantity(cartId, productId, updatedQuantity) {
         try {
-            const cart = await CartModel.findById(cartId);
-
-            if (!cart) {
-                throw new Error('Carrito no encontrado');
+            const cartItem = await CartModel.findById(cartId);
+            if (!cartItem) {
+                throw new Error('Invalid cart id');
             }
 
-            const productIndex = cart.products.findIndex(item => item.product._id.toString() !== productId);
+            const product = cartItem.products.find(
+                (item) => item.product._id.toString() === productId);
 
-            if (productIndex !== -1) {
-                cart.products[productIndex].quantity = newQuantity;
-
-                cart.markModified('products');
-
-                await cart.save();
-                return cart;
-            } else {
-                throw new Error('Producto no encontrado en el carrito');
+            if (!product) {
+                throw new Error('Invalid product id');
             }
+
+            product.quantity = updatedQuantity;
+            cartItem.markModified('products');
+            await cartItem.save();
+
+            return cartItem;
         } catch (error) {
-            console.error('Error al actualizar la cantidad del producto en el carrito', error);
-            throw error;
+            console.error('Error while updating the product quantity', error);
+            throw new Error(error);
         }
-    };
+    }
 
-    async emptyCart (cartId) {
+    //y después en la linea 95 de cart.router hay que cambiar  a const updatedCart = await cm.updateProductQuantity////(cartId, productId, newQuantity);
+
+
+
+    async emptyCart(cartId) {
         try {
             const cart = await CartModel.findByIdAndUpdate(
                 cartId,
